@@ -80,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_VOLU, KC_VOLD) },
+    [0] = { ENCODER_CCW_CW(LCTL(KC_TAB), LCTL(LSFT(KC_TAB)))},
     [1] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
     [2] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
     [3] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) }
@@ -128,24 +128,24 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (led_state.caps_lock) {
 
         for (uint8_t i = 0; i < ARRAY_SIZE(LED_LIST_LETTERS); i++) {
-            rgb_matrix_set_color(LED_LIST_LETTERS[i], RGB_CYAN);
+            rgb_matrix_set_color(LED_LIST_LETTERS[i], RGB_WHITE);
         }
-        rgb_matrix_set_color(LED_L1, RGB_CYAN);
-        rgb_matrix_set_color(LED_L2, RGB_CYAN);
-        rgb_matrix_set_color(LED_L3, RGB_CYAN);
-        rgb_matrix_set_color(LED_L4, RGB_CYAN);
-        rgb_matrix_set_color(LED_L5, RGB_CYAN);
-        rgb_matrix_set_color(LED_L6, RGB_CYAN);
-        rgb_matrix_set_color(LED_L7, RGB_CYAN);
+        rgb_matrix_set_color(LED_L1, RGB_WHITE);
+        rgb_matrix_set_color(LED_L2, RGB_WHITE);
+        rgb_matrix_set_color(LED_L3, RGB_WHITE);
+        rgb_matrix_set_color(LED_L4, RGB_WHITE);
+        rgb_matrix_set_color(LED_L5, RGB_WHITE);
+        rgb_matrix_set_color(LED_L6, RGB_WHITE);
+        rgb_matrix_set_color(LED_L7, RGB_WHITE);
         rgb_matrix_set_color(LED_L8, RGB_CYAN);
-        rgb_matrix_set_color(LED_LSFT, RGB_CYAN);
+        rgb_matrix_set_color(LED_LSFT, RGB_WHITE);
 
     }
 
     // Winkey disabled (gaming) mode RGB setup
     if (keymap_config.no_gui) {
         rgb_matrix_set_color(LED_LWIN, RGB_RED); //light up Winkey red when disabled
-        rgb_matrix_set_color(LED_W, RGB_CHARTREUSE); //light up gaming keys with WSAD higlighted
+        rgb_matrix_set_color(LED_W, RGB_CHARTREUSE); //light up gaming keys with WSAD highlighted
         rgb_matrix_set_color(LED_S, RGB_CHARTREUSE);
         rgb_matrix_set_color(LED_A, RGB_CHARTREUSE);
         rgb_matrix_set_color(LED_D, RGB_CHARTREUSE);
@@ -165,81 +165,80 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     // Fn selector mode RGB setup
     switch (get_highest_layer(layer_state)) { // special handling per layer
-    case 1: // on Fn layer select what the encoder does when pressed
-        rgb_matrix_set_color(LED_FN, RGB_RED); //FN key
+        case 1: // on Fn layer select what the encoder does when pressed
+            rgb_matrix_set_color(LED_FN, RGB_RED); //FN key
 
-        //NEW RGB LIGHTING TO RING KEYBOARD ON FN LAYER ACTIVATION:
-        for (uint8_t j = 0; j < ARRAY_SIZE(LED_LIST_FUNCROW); j++) {
-            rgb_matrix_set_color(LED_LIST_FUNCROW[j], RGB_RED);
-        }
-        // rgb_matrix_set_color(LED_LCTL, RGB_RED);
-        // rgb_matrix_set_color(LED_LALT, RGB_RED);
-        // rgb_matrix_set_color(LED_SPC, RGB_RED);
-        // rgb_matrix_set_color(LED_LWIN, RGB_RED);
-        //rgb_matrix_set_color(LED_RALT, RGB_RED);
-        rgb_matrix_set_color(LED_FN, RGB_OFFBLUE);
-        //rgb_matrix_set_color(LED_RCTL, RGB_RED);
-        rgb_matrix_set_color(LED_BSLS, RGB_RED);
-        rgb_matrix_set_color(LED_L1, RGB_RED);
-        rgb_matrix_set_color(LED_L2, RGB_RED);
-        rgb_matrix_set_color(LED_L3, RGB_RED);
-        rgb_matrix_set_color(LED_L4, RGB_RED);
-        rgb_matrix_set_color(LED_L5, RGB_RED);
-        rgb_matrix_set_color(LED_L6, RGB_RED);
-        rgb_matrix_set_color(LED_L7, RGB_RED);
-        rgb_matrix_set_color(LED_L8, RGB_RED);
-        rgb_matrix_set_color(LED_DOWN, RGB_RED);
-        rgb_matrix_set_color(LED_LEFT, RGB_RED);
-        rgb_matrix_set_color(LED_RIGHT, RGB_RED);
-        rgb_matrix_set_color(LED_R1, RGB_RED);
-        rgb_matrix_set_color(LED_R2, RGB_RED);
-        rgb_matrix_set_color(LED_R3, RGB_RED);
-        rgb_matrix_set_color(LED_R4, RGB_RED);
-        rgb_matrix_set_color(LED_R5, RGB_RED);
-        rgb_matrix_set_color(LED_R6, RGB_RED);
-        rgb_matrix_set_color(LED_R7, RGB_RED);
-        rgb_matrix_set_color(LED_R8, RGB_RED);
-        // rgb_matrix_set_color(LED_MINS, RGB_OFFBLUE);
-        // rgb_matrix_set_color(LED_EQL, RGB_OFFBLUE);
+            //NEW RGB LIGHTING TO RING KEYBOARD ON FN LAYER ACTIVATION:
+            for (uint8_t j = 0; j < ARRAY_SIZE(LED_LIST_FUNCROW); j++) {
+                rgb_matrix_set_color(LED_LIST_FUNCROW[j], RGB_CYAN);
+            }
+            // rgb_matrix_set_color(LED_LCTL, RGB_RED);
+            // rgb_matrix_set_color(LED_LALT, RGB_RED);
+            // rgb_matrix_set_color(LED_SPC, RGB_RED);
+            // rgb_matrix_set_color(LED_LWIN, RGB_RED);
+            //rgb_matrix_set_color(LED_RALT, RGB_RED);
+            rgb_matrix_set_color(LED_FN, RGB_CYAN);
+            //rgb_matrix_set_color(LED_RCTL, RGB_RED);
+            rgb_matrix_set_color(LED_BSLS, RGB_CYAN);
+            rgb_matrix_set_color(LED_L1, RGB_CYAN);
+            rgb_matrix_set_color(LED_L2, RGB_CYAN);
+            rgb_matrix_set_color(LED_L3, RGB_CYAN);
+            rgb_matrix_set_color(LED_L4, RGB_CYAN);
+            rgb_matrix_set_color(LED_L5, RGB_CYAN);
+            rgb_matrix_set_color(LED_L6, RGB_CYAN);
+            rgb_matrix_set_color(LED_L7, RGB_CYAN);
+            rgb_matrix_set_color(LED_L8, RGB_CYAN);
+            rgb_matrix_set_color(LED_W, RGB_CYAN);
+            rgb_matrix_set_color(LED_S, RGB_CYAN);
+            rgb_matrix_set_color(LED_E, RGB_CYAN);
+            rgb_matrix_set_color(LED_D, RGB_CYAN);
+            rgb_matrix_set_color(LED_R, RGB_CYAN);
+            rgb_matrix_set_color(LED_F, RGB_CYAN);
+            rgb_matrix_set_color(LED_N, RGB_CYAN);
+            rgb_matrix_set_color(LED_DOWN, RGB_CYAN);
+            rgb_matrix_set_color(LED_LEFT, RGB_CYAN);
+            rgb_matrix_set_color(LED_RIGHT, RGB_CYAN);
+            rgb_matrix_set_color(LED_R1, RGB_CYAN);
+            rgb_matrix_set_color(LED_R2, RGB_CYAN);
+            rgb_matrix_set_color(LED_R3, RGB_CYAN);
+            rgb_matrix_set_color(LED_R4, RGB_CYAN);
+            rgb_matrix_set_color(LED_R5, RGB_CYAN);
+            rgb_matrix_set_color(LED_R6, RGB_CYAN);
+            rgb_matrix_set_color(LED_R7, RGB_CYAN);
+            rgb_matrix_set_color(LED_R8, RGB_CYAN);
+            // rgb_matrix_set_color(LED_MINS, RGB_CYAN);
+            // rgb_matrix_set_color(LED_EQL, RGB_CYAN);
 
-        //Add RGB statuses for user.config toggles
+            //Add RGB statuses for user.config toggles
 
-        rgb_matrix_set_color(LED_1, RGB_GREEN);
-        rgb_matrix_set_color(LED_2, RGB_GREEN);
-        rgb_matrix_set_color(LED_3, RGB_GREEN);
-        rgb_matrix_set_color(LED_4, RGB_GREEN);
-        rgb_matrix_set_color(LED_4, RGB_GREEN);
-        rgb_matrix_set_color(LED_5, RGB_GREEN);
-        rgb_matrix_set_color(LED_6, RGB_GREEN);
-        rgb_matrix_set_color(LED_7, RGB_GREEN);
-        rgb_matrix_set_color(LED_8, RGB_GREEN);
-        rgb_matrix_set_color(LED_9, RGB_GREEN);
+            rgb_matrix_set_color(LED_1, RGB_CYAN);
+            rgb_matrix_set_color(LED_2, RGB_CYAN);
 
-        break;
-    case 2:
-        for (uint8_t i = 0; i < ARRAY_SIZE(LED_LIST_NUMPAD); i++) {
-            rgb_matrix_set_color(LED_LIST_NUMPAD[i], RGB_OFFBLUE);
-        }
-        rgb_matrix_set_color(LED_L1, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L2, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L3, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L4, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L5, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L6, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L7, RGB_OFFBLUE);
-        rgb_matrix_set_color(LED_L8, RGB_OFFBLUE);
-        // rgb_matrix_set_color(LED_CAPS, RGB_OFFBLUE);
-        // rgb_matrix_set_color(LED_UP, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_DOWN, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_LEFT, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_RIGHT, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_RCTL, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_RSFT, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_END, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_PGUP, RGB_CHARTREUSE);
-        // rgb_matrix_set_color(LED_PGDN, RGB_CHARTREUSE);
+            break;
+        case 2:
+            for (uint8_t i = 0; i < ARRAY_SIZE(LED_LIST_NUMPAD); i++) {
+                rgb_matrix_set_color(LED_LIST_NUMPAD[i], RGB_CYAN);
+            }
+            rgb_matrix_set_color(LED_L1, RGB_CYAN);
+            rgb_matrix_set_color(LED_L2, RGB_CYAN);
+            rgb_matrix_set_color(LED_L3, RGB_CYAN);
+            rgb_matrix_set_color(LED_L4, RGB_CYAN);
+            rgb_matrix_set_color(LED_L5, RGB_CYAN);
+            rgb_matrix_set_color(LED_L6, RGB_CYAN);
+            rgb_matrix_set_color(LED_L7, RGB_CYAN);
+            rgb_matrix_set_color(LED_L8, RGB_CYAN);
+            // rgb_matrix_set_color(LED_CAPS, RGB_CYAN);
+            // rgb_matrix_set_color(LED_UP, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_DOWN, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_LEFT, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_RIGHT, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_RCTL, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_RSFT, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_END, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_PGUP, RGB_CHARTREUSE);
+            // rgb_matrix_set_color(LED_PGDN, RGB_CHARTREUSE);
 
-        break;
+            break;
     }
     return false;
 }
