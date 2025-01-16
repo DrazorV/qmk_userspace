@@ -12,4 +12,4 @@ EEPROM_DRIVER = wear_leveling
 WEAR_LEVELING_DRIVER = embedded_flash
 AUDIO_ENABLE = no         # Disable audio feature if not used
 BACKLIGHT_ENABLE = no     # Disable backlight feature if not used
-SRC += rgb_settings.c
+SRC += eeprom_settings.c

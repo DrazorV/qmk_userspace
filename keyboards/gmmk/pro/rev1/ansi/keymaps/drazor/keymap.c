@@ -17,7 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 #include "rgb_matrix_map.h"
-#include "rgb_settings.h"
+#include "eeprom_settings.h"
+#include "eeprom.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -93,24 +94,32 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 
 #include QMK_KEYBOARD_H
 
+enum custom_keycodes {
+    RGB_OVERLAY_TOGGLE = SAFE_RANGE, // Ensure unique keycode
+};
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
             case AC_TOGG:
+                user_config.reactive_overlay = !user_config.reactive_overlay;
+                eeconfig_update_user_datablock(&user_config);
                 autocorrect_toggle();
-                return false; // Skip further processing for this key
-            case AC_ON:
-                autocorrect_enable();
                 return false;
-            case AC_OFF:
-                autocorrect_disable();
+            case RGB_OVERLAY_TOGGLE:
+                user_config.ac_togg = !user_config.ac_togg;
+                eeconfig_update_user_datablock(&user_config);
                 return false;
         }
     }
     return true; // Process other keycodes as usual
 }
 
-
+// User EEPROM Initialization
+void keyboard_post_init_user(void) {
+    eeconfig_read_user_datablock(&user_config);
+}
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // if (get_rgb_nightmode()) rgb_matrix_set_color_all(RGB_OFF);
@@ -222,6 +231,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         rgb_matrix_set_color(LED_L7, rgb.r, rgb.g, rgb.b);
         rgb_matrix_set_color(LED_L8, rgb.r, rgb.g, rgb.b);
     }
+
+//    if (user_config.ac_togg) {
+//        for (uint8_t i = led_min; i < led_max; i++) {
+//            if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {  // Check if LED is tied to a key
+//                if (rgb_matrix_is_key_pressed(i)) {
+//                    // Apply an additional color effect (e.g., a heatmap pulse)
+//                    rgb_matrix_set_color(i, 255, 255, 255);  // Example: Red glow on press
+//                }
+//            }
+//        }
+//
+//    }
+
+
     return false;
 }
 

@@ -9,6 +9,18 @@
   "keycodes": [
     "qmk_lighting"
   ],
+  "customKeycodes": [
+    {
+      "name": "Autocorrect Toggle",
+      "title": "Enables or Disables the autocorrect function of the keyboard",
+      "shortName": "AC_TOGG"
+    },
+    {
+      "name": "Reactive Overlay",
+      "title": "Adds a reactive overlay on top of the active effect",
+      "shortName": "RGB_OVERLAY_TOGGLE"
+    }
+  ],
   "menus": [
     {
       "label": "Lighting",
@@ -116,17 +128,27 @@
             {
               "label": "Caps Lock Color",
               "type": "color",
-              "content": ["caps_lock_hue", 0, 1]
+              "content": ["caps_lock", 0, 1]
             },
             {
               "label": "FN Layer Color",
               "type": "color",
-              "content": ["layer1_hue", 0, 2]
+              "content": ["layer1", 0, 2]
             },
             {
               "label": "NumLock Layer Color",
               "type": "color",
-              "content": ["layer2_hue", 0, 3]
+              "content": ["layer2", 0, 3]
+            },
+            {
+              "label": "Toggle Reactive Overlay",
+              "type": "toggle",
+              "content": ["id_reactive", 0, 4]
+            },
+            {
+              "label": "Toggle Autocorrect",
+              "type": "toggle",
+              "content": ["id_autocorrect", 0, 5]
             }
           ]
         }

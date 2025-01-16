@@ -1,4 +1,4 @@
-#include "rgb_settings.h"
+#include "eeprom_settings.h"
 #include "eeprom.h"
 #include "rgb_matrix.h"
 #include "raw_hid.h"
@@ -6,10 +6,12 @@
 
 user_config_t user_config; // Global configuration struct
 
-enum via_hue_value {
-    id_capslock_rgb = 1,
-    id_layer1_rgb   = 2,
-    id_layer2_rgb   = 3,
+enum via_value {
+    id_capslock     = 1,
+    id_layer1       = 2,
+    id_layer2       = 3,
+    id_reactive     = 4,
+    id_autocorrect  = 5
 };
 
 void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
@@ -22,12 +24,12 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
         switch (*command_id) {
             case id_custom_set_value:
             {
-                user_config_set_rgb(value_id_and_data);
+                user_config_set_value(value_id_and_data);
                 break;
             }
             case id_custom_get_value:
             {
-                user_config_get_rgb(value_id_and_data);
+                user_config_get_value(value_id_and_data);
                 break;
             }
             case id_custom_save:
@@ -50,56 +52,52 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
 
 
 // VIA Command Handling
-void  user_config_set_rgb(uint8_t *data) {
+void  user_config_set_value(uint8_t *data) {
 
-    // data = [ value_id, value_data ]
-    uint8_t *value_id   = &(data[0]);
-    uint8_t *hsv_data = &(data[1]); // Point to the RGB values
-
-    hsv_t temp_hsv;
-    temp_hsv.h = hsv_data[0]; // First byte: Red
-    temp_hsv.s = hsv_data[1]; // Second byte: Green
+    uint8_t *value_id = &(data[0]);  // Get the value ID
+    hsv_t *hsv_data   = (hsv_t *)&(data[1]);  // Point to HSV structure
 
     switch (*value_id) {
-        case id_capslock_rgb:
-            user_config.caps_lock_hs = temp_hsv;
+        case id_capslock:
+            user_config.caps_lock_hs = *hsv_data;
             break;
-        case id_layer1_rgb:
-            user_config.layer1_hs = temp_hsv;
+        case id_layer1:
+            user_config.layer1_hs = *hsv_data;
             break;
-        case id_layer2_rgb:
-            user_config.layer2_hs = temp_hsv;
+        case id_layer2:
+            user_config.layer2_hs = *hsv_data;
             break;
+        case id_reactive:
+            user_config.reactive_overlay = data[1];
+        case id_autocorrect:
+            user_config.ac_togg = data[1];
         default:
             return; // Unknown value ID, do nothing
     }
 }
 
-void user_config_get_rgb(uint8_t *data) {
+void user_config_get_value(uint8_t *data) {
     // data = [ value_id, R, G, B ]
     uint8_t *value_id = &(data[0]);
-    uint8_t *hsv_data = &(data[1]); // Destination buffer for RGB data
-
-    hsv_t temp_hsv;
+    hsv_t *hsv_data   = (hsv_t *)&(data[1]);
 
     switch (*value_id) {
-        case id_capslock_rgb:
-            temp_hsv = user_config.caps_lock_hs;
+        case id_capslock:
+            *hsv_data = user_config.caps_lock_hs;
             break;
-        case id_layer1_rgb:
-            temp_hsv = user_config.layer1_hs;
+        case id_layer1:
+            *hsv_data = user_config.layer1_hs;
             break;
-        case id_layer2_rgb:
-            temp_hsv = user_config.layer2_hs;
+        case id_layer2:
+            *hsv_data = user_config.layer2_hs;
             break;
+        case id_reactive: // Handle overlay toggle as boolean
+            data[1] = user_config.reactive_overlay;
+            break;
+        case id_autocorrect: // Handle AC toggle as boolean
+            data[1] = user_config.ac_togg;
+            break;
+
     }
-
-    hsv_data[0] = temp_hsv.h; // Send Red
-    hsv_data[1] = temp_hsv.s; // Send Green
-}
-
-// User EEPROM Initialization
-void keyboard_post_init_user(void) {
-    eeconfig_read_user_datablock(&user_config);
 }
 
