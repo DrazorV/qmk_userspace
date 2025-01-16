@@ -103,12 +103,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
             case AC_TOGG:
-                user_config.reactive_overlay = !user_config.reactive_overlay;
-                eeconfig_update_user_datablock(&user_config);
                 autocorrect_toggle();
                 return false;
             case RGB_OVERLAY_TOGGLE:
-                user_config.ac_togg = !user_config.ac_togg;
+                user_config.reactive_overlay = !user_config.reactive_overlay;
                 eeconfig_update_user_datablock(&user_config);
                 return false;
         }

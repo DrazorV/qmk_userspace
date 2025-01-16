@@ -11,7 +11,6 @@ typedef union {
         hsv_t layer1_hs;    // Hue & Saturation for Layer 1
         hsv_t layer2_hs;    // Hue & Saturation for Layer 2
         bool reactive_overlay; // Toggle for the reactive overlay effect
-        bool ac_togg;     // Toggle for autocorrect feature
     } __attribute__((packed)); // Ensure no padding
 } user_config_t;
 

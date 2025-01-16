@@ -69,8 +69,6 @@ void  user_config_set_value(uint8_t *data) {
             break;
         case id_reactive:
             user_config.reactive_overlay = data[1];
-        case id_autocorrect:
-            user_config.ac_togg = data[1];
         default:
             return; // Unknown value ID, do nothing
     }
@@ -94,10 +92,6 @@ void user_config_get_value(uint8_t *data) {
         case id_reactive: // Handle overlay toggle as boolean
             data[1] = user_config.reactive_overlay;
             break;
-        case id_autocorrect: // Handle AC toggle as boolean
-            data[1] = user_config.ac_togg;
-            break;
-
     }
 }
 

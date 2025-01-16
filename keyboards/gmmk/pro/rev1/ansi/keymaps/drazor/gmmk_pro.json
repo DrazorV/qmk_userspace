@@ -144,11 +144,6 @@
               "label": "Toggle Reactive Overlay",
               "type": "toggle",
               "content": ["id_reactive", 0, 4]
-            },
-            {
-              "label": "Toggle Autocorrect",
-              "type": "toggle",
-              "content": ["id_autocorrect", 0, 5]
             }
           ]
         }
