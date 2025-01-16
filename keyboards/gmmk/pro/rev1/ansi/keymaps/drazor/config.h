@@ -8,7 +8,7 @@
 
 #define DYNAMIC_KEYMAP_EEPROM_MAX_SIZE 1024
 #define VIA_EEPROM_CUSTOM_CONFIG_SIZE 32 // Reserve space for custom settings
-
+#define EECONFIG_USER_DATA_SIZE 9
 
 // Force n-key rollover
 #define FORCE_NKRO

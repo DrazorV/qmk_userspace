@@ -2,32 +2,14 @@
 #include "eeprom.h"
 #include "rgb_matrix.h"
 #include "raw_hid.h"
+#include "print.h"
 
-hue_data_t hues = {128, 128, 128}; // Default values
-
-// EEPROM Operations
-void save_hues_to_eeprom(void) {
-    uint32_t packed_hues = *((uint32_t*)&hues); // Pack struct into 32-bit value
-    eeconfig_update_user(packed_hues);         // Save to EEPROM
-}
-
-void load_hues_from_eeprom(void) {
-    uint32_t packed_hues = eeconfig_read_user(); // Read 32-bit value from EEPROM
-    if (packed_hues != 0xFFFFFFFF) {             // Check for uninitialized data
-        *((uint32_t*)&hues) = packed_hues;       // Unpack struct
-    } else {
-        hues.caps_lock_hue = 85; // Default values
-        hues.layer1_hue = 85;
-        hues.layer2_hue = 85;
-        save_hues_to_eeprom(); // Save defaults
-    }
-    xprintf("Loaded Hues - CapsLock: %u, Layer1: %u, Layer2: %u\n",hues.caps_lock_hue, hues.layer1_hue, hues.layer2_hue);
-}
+user_config_t user_config; // Global configuration struct
 
 enum via_hue_value {
-    id_capslock_hue = 1,
-    id_layer1_hue   = 2,
-    id_layer2_hue   = 3,
+    id_capslock_rgb = 1,
+    id_layer1_rgb   = 2,
+    id_layer2_rgb   = 3,
 };
 
 void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
@@ -40,17 +22,17 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
         switch (*command_id) {
             case id_custom_set_value:
             {
-                hue_config_set_value(value_id_and_data);
+                user_config_set_rgb(value_id_and_data);
                 break;
             }
             case id_custom_get_value:
             {
-                hue_config_get_value(value_id_and_data);
+                user_config_get_rgb(value_id_and_data);
                 break;
             }
             case id_custom_save:
             {
-                hue_config_save();
+                eeconfig_update_user_datablock(&user_config); // Save to EEPROM
                 break;
             }
             default:
@@ -68,61 +50,56 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
 
 
 // VIA Command Handling
-void  hue_config_set_value(uint8_t *data) {
+void  user_config_set_rgb(uint8_t *data) {
 
     // data = [ value_id, value_data ]
     uint8_t *value_id   = &(data[0]);
-    uint8_t *value_data = &(data[1]);
+    uint8_t *hsv_data = &(data[1]); // Point to the RGB values
+
+    hsv_t temp_hsv;
+    temp_hsv.h = hsv_data[0]; // First byte: Red
+    temp_hsv.s = hsv_data[1]; // Second byte: Green
 
     switch (*value_id) {
-        case id_capslock_hue:
-        {
-            hues.caps_lock_hue = *value_data;
+        case id_capslock_rgb:
+            user_config.caps_lock_hs = temp_hsv;
             break;
-        }
-        case id_layer1_hue:
-        {
-            hues.layer1_hue = *value_data;
+        case id_layer1_rgb:
+            user_config.layer1_hs = temp_hsv;
             break;
-        }
-        case id_layer2_hue:
-        {
-            hues.layer2_hue = *value_data;
+        case id_layer2_rgb:
+            user_config.layer2_hs = temp_hsv;
             break;
-        }
+        default:
+            return; // Unknown value ID, do nothing
     }
 }
 
-void  hue_config_get_value(uint8_t *data) {
+void user_config_get_rgb(uint8_t *data) {
+    // data = [ value_id, R, G, B ]
+    uint8_t *value_id = &(data[0]);
+    uint8_t *hsv_data = &(data[1]); // Destination buffer for RGB data
 
-    // data = [ value_id, value_data ]
-    uint8_t *value_id   = &(data[0]);
-    uint8_t *value_data = &(data[1]);
+    hsv_t temp_hsv;
 
-    switch ( *value_id ) {
-        case id_capslock_hue:
-        {
-            *value_data = hues.caps_lock_hue;
+    switch (*value_id) {
+        case id_capslock_rgb:
+            temp_hsv = user_config.caps_lock_hs;
             break;
-        }
-        case id_layer1_hue:
-        {
-            *value_data = hues.layer1_hue;
+        case id_layer1_rgb:
+            temp_hsv = user_config.layer1_hs;
             break;
-        }
-        case id_layer2_hue:
-        {
-            *value_data = hues.layer2_hue;
+        case id_layer2_rgb:
+            temp_hsv = user_config.layer2_hs;
             break;
-        }
     }
-}
 
-void hue_config_save(void) {
-    save_hues_to_eeprom();
+    hsv_data[0] = temp_hsv.h; // Send Red
+    hsv_data[1] = temp_hsv.s; // Send Green
 }
 
 // User EEPROM Initialization
 void keyboard_post_init_user(void) {
-    load_hues_from_eeprom(); // Load hues from EEPROM
+    eeconfig_read_user_datablock(&user_config);
 }
+

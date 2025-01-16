@@ -114,21 +114,18 @@
               ]
             },
             {
-              "label": "Caps Lock Hue",
-              "type": "range",
-              "options": [0, 255],
+              "label": "Caps Lock Color",
+              "type": "color",
               "content": ["caps_lock_hue", 0, 1]
             },
             {
-              "label": "FN Layer Hue",
-              "type": "range",
-              "options": [0, 255],
+              "label": "FN Layer Color",
+              "type": "color",
               "content": ["layer1_hue", 0, 2]
             },
             {
-              "label": "NumLock Layer Hue",
-              "type": "range",
-              "options": [0, 255],
+              "label": "NumLock Layer Color",
+              "type": "color",
               "content": ["layer2_hue", 0, 3]
             }
           ]

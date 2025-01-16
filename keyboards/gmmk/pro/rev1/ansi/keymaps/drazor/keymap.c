@@ -127,7 +127,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     // CapsLock RGB setup
     if (led_state.caps_lock) {
-        hsv_t hsv = {hues.caps_lock_hue, rgb_matrix_get_sat(), rgb_matrix_get_val()};
+        hsv_t hsv = user_config.caps_lock_hs;
+        hsv.v = rgb_matrix_get_val();
         rgb_t rgb = hsv_to_rgb(hsv);
 
         for (uint8_t i = 0; i < ARRAY_SIZE(LED_LIST_LETTERS); i++) {
@@ -166,7 +167,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (IS_LAYER_ON(1)) {
-        hsv_t hsv = {hues.layer1_hue, rgb_matrix_get_sat(), rgb_matrix_get_val()};
+        hsv_t hsv = user_config.layer1_hs;
+        hsv.v = rgb_matrix_get_val();
         rgb_t rgb = hsv_to_rgb(hsv);
 
         for (uint8_t j = 0; j < ARRAY_SIZE(LED_LIST_FUNCROW); j++) {
@@ -204,8 +206,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (IS_LAYER_ON(2)) {
-        hsv_t hsv = {hues.layer2_hue, rgb_matrix_get_sat(), rgb_matrix_get_val()};
+        hsv_t hsv = user_config.layer2_hs;
+        hsv.v = rgb_matrix_get_val();
         rgb_t rgb = hsv_to_rgb(hsv);
+
         for (uint8_t i = 0; i < ARRAY_SIZE(LED_LIST_NUMPAD); i++) {
             rgb_matrix_set_color(LED_LIST_NUMPAD[i], rgb.r, rgb.g, rgb.b);
         }
