@@ -11,7 +11,6 @@ enum via_value {
     id_layer1       = 2,
     id_layer2       = 3,
     id_reactive     = 4,
-    id_autocorrect  = 5
 };
 
 void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
