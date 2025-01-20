@@ -10,6 +10,12 @@ typedef union {
         hsv_t caps_lock_hs; // Hue & Saturation for Caps Lock
         hsv_t layer1_hs;    // Hue & Saturation for Layer 1
         hsv_t layer2_hs;    // Hue & Saturation for Layer 2
+        uint8_t caps_lock_br;
+        uint8_t layer1_br;
+        uint8_t layer2_br;
+        bool caps_lock_ind;
+        bool layer1_ind;
+        bool layer2_ind;
         bool reactive_overlay; // Toggle for the reactive overlay effect
     } __attribute__((packed)); // Ensure no padding
 } user_config_t;
