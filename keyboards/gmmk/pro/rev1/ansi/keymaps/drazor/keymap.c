@@ -107,7 +107,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             case RGB_OVERLAY_TOGGLE:
                 user_config.reactive_overlay = !user_config.reactive_overlay;
-                eeconfig_update_user_datablock(&user_config);
+                eeconfig_update_user_datablock(&user_config, 0, sizeof(user_config_t)); // Save to EEPROM
                 return false;
         }
     }
@@ -116,7 +116,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // User EEPROM Initialization
 void keyboard_post_init_user(void) {
-    eeconfig_read_user_datablock(&user_config);
+    eeconfig_read_user_datablock(&user_config, 0, sizeof(user_config));
 }
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {

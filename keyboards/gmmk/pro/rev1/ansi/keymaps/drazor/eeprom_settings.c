@@ -38,7 +38,7 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
             }
             case id_custom_save:
             {
-                eeconfig_update_user_datablock(&user_config); // Save to EEPROM
+                eeconfig_update_user_datablock(&user_config, 0, sizeof(user_config_t)); // Save to EEPROM
                 break;
             }
             default:
